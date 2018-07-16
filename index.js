@@ -1,4 +1,5 @@
 var Word = require("./Word")
+var inquirer = require("inquirer");
 
 listOfMovies = [
     'A Clockwork Orange',
@@ -111,10 +112,31 @@ console.log("computerPick=" + computerPick)
 
 var word = new Word();
 
-//populate movie in Word array
-word.populateWord(computerPick, letterArray);
+ //populate movie in Word array
+ word.populateWord(computerPick, letterArray);
 
-console.log("computerPick=" + computerPick);
-console.log("letterArray=" + JSON.stringify(letterArray));
+ word.displayWord(letterArray);
 
-word.displayWord(letterArray);
+function main() {
+
+    inquirer.prompt([
+        {
+        type: "input",
+        name: "letter",
+        message: "Guess a letter"
+        }
+    ]).then(function(user) {
+        var userGuess = user.letter.toUpperCase();
+        word.evaluateUserGuess(letterArray, userGuess);
+        word.displayWord(letterArray);
+
+        if (userGuess) {
+            main();
+        };
+
+    });
+
+};
+
+//run the program
+main();
